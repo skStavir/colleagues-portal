@@ -5,69 +5,89 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
             margin: 0;
             padding: 0;
         }
 
-        h1, h2 {
+        h1 {
             text-align: center;
-            margin: 20px 0;
+            padding: 20px;
+            color: #333;
         }
 
-        label {
-            display: inline-block;
-            width: 150px;
-            text-align: right;
-            margin-right: 10px;
-        }
-
-        input[type="text"], input[type="date"], input[type="number"] {
-            padding: 5px;
-            width: 150px;
-            border: 1px solid #ccc;
+        div {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 400px;
+            background-color: #fff;
             border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label, select, input {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            padding: 20px;
         }
 
         table {
             width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
             border-collapse: collapse;
-            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+            border: 1px solid #ccc;
         }
 
         th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
+            background-color: #f1f1f1;
+            color: #333;
+            font-weight: bold;
         }
 
         button {
-            padding: 8px 20px;
-            background-color: #3498db;
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Company Calendar</h1>
+    <h1>Welcome to Humaneo</h1>
     
     <!-- Employee Information Section -->
     <div>
@@ -75,12 +95,34 @@
         <input type="text" id="employeeName" name="employeeName"><br><br>
         
         <label for="Month">Month:</label>
-        <input type="text" id="currentMonth" name="currentMonth"><br><br>
+        <select id="currentMonth" name="currentMonth">
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        
+        <label for="Year">Year:</label>
+        <select id="currentYear" name="currentYear">
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+        </select>
     </div>
     
     <!-- Calendar Table Section -->
     <h2>Calendar Entries</h2>
-    <table border="1">
+    <table border="1" id="calendarTable">
         <tr>
             <th>Date</th>
             <th>Working Hours</th>
@@ -88,35 +130,77 @@
             <th>Holiday Hours</th>
         </tr>
         
-        <tr>
-            <td><input type="date" name="entryDate"></td>
-            <td><input type="number" name="workingHours" step="0.5"></td>
-            <td><input type="number" name="leaveHours" step="0.5"></td>
-            <td><input type="number" name="holidayHours" step="0.5"></td>
-        </tr>
-        
-        <!-- You can add more rows as needed -->
+        <!-- Calendar rows will be added here -->
     </table>
     
-    <br>
-    <button onclick="addRow()">Add Row</button>
+    <!-- Edit Button -->
+    <button id="editButton">Edit</button>
     
     <script>
-        // Function to add a new row to the table
-        function addRow() {
-            var table = document.querySelector("table");
-            var newRow = table.insertRow(table.rows.length - 1);
+        var editMode = false;
+        var editButton = document.getElementById("editButton");
+        
+        editButton.addEventListener("click", toggleEditMode);
+        
+        function toggleEditMode() {
+            editMode = !editMode;
+            editButton.textContent = editMode ? "Save" : "Edit";
             
-            var cellDate = newRow.insertCell(0);
-            var cellWorkingHours = newRow.insertCell(1);
-            var cellLeaveHours = newRow.insertCell(2);
-            var cellHolidayHours = newRow.insertCell(3);
-            
-            cellDate.innerHTML = '<input type="date" name="entryDate">';
-            cellWorkingHours.innerHTML = '<input type="number" name="workingHours" step="0.5">';
-            cellLeaveHours.innerHTML = '<input type="number" name="leaveHours" step="0.5">';
-            cellHolidayHours.innerHTML = '<input type="number" name="holidayHours" step="0.5">';
+            var inputFields = document.querySelectorAll("#calendarTable input");
+            inputFields.forEach(function(input) {
+                input.disabled = !editMode;
+            });
         }
+        
+        function formatDayMonthYear(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            return day + "-" + month + "-" + year;
+        }
+        
+        function displayCalendar() {
+            var selectedMonth = parseInt(document.getElementById("currentMonth").value, 10);
+            var selectedYear = parseInt(document.getElementById("currentYear").value, 10);
+            var calendarTable = document.getElementById("calendarTable");
+            
+            // Clear previous rows from the table
+            while (calendarTable.rows.length > 1) {
+                calendarTable.deleteRow(1);
+            }
+            
+            // Calculate the number of days in the selected month
+            var daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+            
+            // Generate rows for each day in the month
+            for (var day = 1; day <= daysInMonth; day++) {
+                var newRow = calendarTable.insertRow(-1);
+                var cellDate = newRow.insertCell(0);
+                var cellWorkingHours = newRow.insertCell(1);
+                var cellLeaveHours = newRow.insertCell(2);
+                var cellHolidayHours = newRow.insertCell(3);
+                
+                // Format the day with leading zero if needed
+                var formattedDay = day < 10 ? "0" + day : day;
+                
+                var date = new Date(selectedYear, selectedMonth - 1, day);
+                var formattedDate = formatDayMonthYear(date);
+                
+                cellDate.textContent = formattedDate;
+                cellWorkingHours.innerHTML = '<input type="number" name="workingHours" step="0.5" Max="8" disabled>';
+                cellLeaveHours.innerHTML = '<input type="number" name="leaveHours" step="0.5" Max="8" disabled>';
+                cellHolidayHours.innerHTML = '<input type="number" name="holidayHours" step="0.5" Max="8" disabled>';
+            }
+        }
+        
+        // Automatically display calendar on month or year change
+        document.getElementById("currentMonth").addEventListener("change", displayCalendar);
+        document.getElementById("currentYear").addEventListener("change", displayCalendar);
+        
+        // Initial display
+        displayCalendar();
     </script>
 </body>
 </html>
+
+

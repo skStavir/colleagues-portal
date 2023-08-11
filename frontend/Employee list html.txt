@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+    <title>Employee List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .edit-button, .save-button, #add-row-button, #delete-row-button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .edit-button:hover, .save-button:hover, #add-row-button:hover, #delete-row-button:hover {
+            background-color: #45a049;
+        }
+        
+        .save-button {
+            display: none;
+        }
+    </style>
+<head>
+    <title>Employee List</title>
+</head>
+<body>
+    <h1>Employee List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Designation</th>
+                <th>Reporting Manager</th>
+                <th>Joining Date</th>
+                <th>Email ID</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td contenteditable="true">Ajesh</td>
+                <td contenteditable="true">Software Engineer 
+                  Trainee</td>
+                <td contenteditable="true">Santhosh Kumar</td>
+                <td contenteditable="true">2-5-2023</td>
+                <td contenteditable="true">ajesh.ajayan@humaneo.in</td>
+                <td>
+                    <button class="edit-button">Edit</button>
+                    <button class="save-button" style="display: none;">Save</button>
+                </td>
+            </tr>
+          <tr>
+                <td contenteditable="true">Devi</td>
+                <td contenteditable="true">Software Engineer 
+                  Trainee</td>
+                <td contenteditable="true">Santhosh Kumar</td>
+                <td contenteditable="true">11-7-2023</td>
+                <td contenteditable="true">devi.p@humaneo.in</td>
+                <td>
+                    <button class="edit-button">Edit</button>
+                    <button class="save-button" style="display: none;">Save</button>
+                </td>
+            </tr>
+           <tr>
+                <td contenteditable="true">Krishnavamsi</td>
+                <td contenteditable="true">Software Engineer 
+                  Trainee</td>
+                <td contenteditable="true">Santhosh Kumar</td>
+                <td contenteditable="true">27-7-2023</td>
+                <td 
+          contenteditable="true">krishnavamsi.sidda@humaneo.in</td>
+                <td>
+                    <button class="edit-button">Edit</button>
+                    <button class="save-button" style="display: none;">Save</button>
+                </td>
+            </tr>
+           <tr>
+                <td contenteditable="true">Santhosh</td>
+                <td contenteditable="true">Director</td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true">3-1-2023</td>
+                <td 
+          contenteditable="true">santhosh.krishna@humaneo.in</td>
+                <td>
+                    <button class="edit-button">Edit</button>
+                    <button class="save-button" style="display: none;">Save</button>
+                </td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+
+    <button id="add-row-button">Add Row</button>
+    <button id="delete-row-button">Delete Row</button>
+
+    <script>
+        const editButtons = document.querySelectorAll('.edit-button');
+        const saveButtons = document.querySelectorAll('.save-button');
+        const editableCells = document.querySelectorAll('td[contenteditable="true"]');
+        const addRowButton = document.getElementById('add-row-button');
+        const deleteRowButton = document.getElementById('delete-row-button');
+
+        editButtons.forEach((editButton, index) => {
+            editButton.addEventListener('click', () => {
+                editableCells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'true');
+                });
+
+                editButtons[index].style.display = 'none';
+                saveButtons[index].style.display = 'block';
+            });
+        });
+
+        saveButtons.forEach((saveButton, index) => {
+            saveButton.addEventListener('click', () => {
+                editableCells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'false');
+                });
+
+                editButtons[index].style.display = 'block';
+                saveButtons[index].style.display = 'none';
+            });
+        });
+
+        addRowButton.addEventListener('click', () => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td>
+                    <button class="edit-button">Edit</button>
+                    <button class="save-button" style="display: none;">Save</button>
+                </td>
+            `;
+
+            const newEditButton = newRow.querySelector('.edit-button');
+            const newSaveButton = newRow.querySelector('.save-button');
+            const newEditableCells = newRow.querySelectorAll('td[contenteditable="true"]');
+
+            newEditButton.addEventListener('click', () => {
+                newEditableCells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'true');
+                });
+
+                newEditButton.style.display = 'none';
+                newSaveButton.style.display = 'block';
+            });
+
+            newSaveButton.addEventListener('click', () => {
+                newEditableCells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'false');
+                });
+
+                newEditButton.style.display = 'block';
+                newSaveButton.style.display = 'none';
+            });
+
+            document.querySelector('tbody').appendChild(newRow);
+        });
+
+        deleteRowButton.addEventListener('click', () => {
+            const rowCount = document.querySelectorAll('tbody tr').length;
+            if (rowCount > 1) {
+                document.querySelector('tbody tr:last-child').remove();
+            }
+        });
+    </script>
+</body>
+</html>
+
+

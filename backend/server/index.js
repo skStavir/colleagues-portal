@@ -26,7 +26,7 @@ connection.connect((err) => {
 // });
 
 // Insert data into the "empdata" table
-app.post("/fetchdata", (req, res) => {
+app.post("/employees", (req, res) => {
     const empData = req.body;
     console.log(empData);
 

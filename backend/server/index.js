@@ -20,7 +20,20 @@ connection.connect((err) => {
     console.log('Connected to the database');
 });
 
-
+// Define a route to get employee data
+app.get('/employees', (req, res) => {
+    const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata';
+  
+    connection.query(query, (err, results) => {
+      if (err) {
+        console.error('Error querying the database: ' + err.message);
+        res.status(500).send('An error occurred while fetching employee data.');
+        return;
+      }
+  
+      res.json(results);
+    });
+  });
 // app.get("/timesheet", (req, res) => {
 //     res.json(timesheet);
 // });

@@ -20,25 +20,7 @@ connection.connect((err) => {
     console.log('Connected to the database');
 });
 
-// Define a route to get employee data
-app.get('/employees', (req, res) => {
-    const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata';
-  
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Error querying the database: ' + err.message);
-        res.status(500).send('An error occurred while fetching employee data.');
-        return;
-      }
-  
-      res.json(results);
-    });
-  });
-// app.get("/timesheet", (req, res) => {
-//     res.json(timesheet);
-// });
-
-// Insert data into the "empdata" table
+// Post data into the "empdata" table
 app.post("/employees", (req, res) => {
     const empData = req.body;
     console.log(empData);
@@ -79,10 +61,65 @@ app.post("/employees", (req, res) => {
             console.log('Data inserted successfully');
             res.send("Entry inserted");
 
-            //console.log('Query results: ', results);
+            
         }
     });
 });
+
+
+// Define a route to update an employee's information
+app.put('/emp_update/:employee_id', (req, res) => {
+    const employeeId = req.params.employee_id;
+    const {
+        employee_name,
+        designation,
+        phone_number,
+        email,
+        joining_date,
+        leaving_date,
+        reporting_manager_id,
+        address
+    } = req.body;
+
+    if (!employee_name || !designation || !phone_number || !email || !joining_date || !leaving_date || !reporting_manager_id || !address) {
+        res.status(400).json({ error: 'Bad request - Missing data' });
+        return;
+    }
+
+    const query = `UPDATE empdata 
+                   SET employee_name = ?, designation = ?, phone_number = ?, email = ?, joining_date = ?, leaving_date = ?, reporting_manager_id = ?, address = ?
+                   WHERE employee_id = ?`;
+
+    connection.query(query, [employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address, employeeId], (err, result) => {
+        if (err) {
+            console.error('Error updating employee data: ' + err.message);
+            res.status(404).json({ error: 'Employee does not exist' });
+            return;
+        }
+
+        if (result.affectedRows > 0) {
+            res.status(201).json({ message: 'Employee updated successfully' });
+        } else {
+            res.status(404).json({ error: 'Employee does not exist' });
+        }
+    });
+});
+
+// Define a route to get employee data
+app.get('/employees', (req, res) => {
+    const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata';
+  
+    connection.query(query, (err, results) => {
+      if (err) {
+        console.error('Error querying the database: ' + err.message);
+        res.status(500).send('An error occurred while fetching employee data.');
+        return;
+      }
+  
+      res.json(results);
+    });
+  });
+
 
 // Listen on the specified port
 app.listen(port, () => console.log(`Server listening at the port ${port}`));

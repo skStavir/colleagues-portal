@@ -5,15 +5,17 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const { v4: uuidv4 } = require('uuid');
 const mysql = require('mysql2/promise'); // Use the promise-based version of mysql2
+var PropertiesReader = require('properties-reader');
+var properties = PropertiesReader('config/app.properties');
 
 // Create a connection pool
 const dbConnectionPool = mysql.createPool({
-    user: 'root',
-    host: '127.0.0.1',
-    database: 'emptime',
-    password: 'password@123',
-    port: 3307,
-    connectionLimit: 10, // Adjust the connection limit as needed
+    user: properties.get("db.user"),
+    host: properties.get("db.server"),
+    database: properties.get("db.name"),
+    password: properties.get("db.password"),
+    port: properties.get("db.port"),
+    connectionLimit: properties.get("db.connectionLimit"), // Adjust the connection limit as needed
 });
 
 

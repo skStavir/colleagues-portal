@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 const mysql = require('mysql2/promise'); // Use the promise-based version of mysql2
 
 // Create a connection pool
-const pool = mysql.createPool({
+const dbConnectionPool = mysql.createPool({
     user: 'root',
     host: '127.0.0.1',
     database: 'emptime',
@@ -19,7 +19,7 @@ const pool = mysql.createPool({
 
 
 // Insert data into the "empdata" table
-app.post("/employee", async (req, res) => {
+app.post("/employees", async (req, res) => {
     const empData = req.body;
     console.log(empData);
 
@@ -31,7 +31,7 @@ app.post("/employee", async (req, res) => {
     }
 
     try {
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
         // Use a parameterized query to insert data into the database
         const query = {
             text: 'INSERT INTO empdata(employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -59,9 +59,9 @@ app.post("/employee", async (req, res) => {
 });
 
 // Define a route to get employee data
-app.get('/emp_getdata', async (req, res) => {
+app.get('/employees', async (req, res) => {
     try {
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
         const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata';
         const [results] = await connection.execute(query);
         connection.release(); // Release the connection back to the pool
@@ -72,7 +72,7 @@ app.get('/emp_getdata', async (req, res) => {
     }
 });
 // Define a route to update an employee's information
-app.put('/emp_update/:employee_id', async (req, res) => {
+app.put('/employees/:employee_id', async (req, res) => {
     const employeeId = req.params.employee_id;
     const {
         employee_name,
@@ -91,7 +91,7 @@ app.put('/emp_update/:employee_id', async (req, res) => {
     }
 
     try {
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
         const query = `
             UPDATE empdata 
             SET employee_name = ?, designation = ?, phone_number = ?, email = ?, 
@@ -145,7 +145,7 @@ app.post('/timesheet', async (req, res) => {
     `;
 
     try {
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
         const [results] = await connection.execute(insertOrUpdateQuery, [timesheet_id, employee_id, date, working_hours, leaves, holiday]);
 
         if (results.affectedRows > 0) {
@@ -182,7 +182,7 @@ app.get('/employees/:employeeId/timesheet/month/:yearAndMonth', async (req, res)
     const [year, month] = yearAndMonth.split('-');
 
     try {
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
 
         // Query the database to fetch timesheet data
         const query = `
@@ -219,7 +219,7 @@ app.get('/employees/:reporting_manager_id/subordinates/timesheet/month/:yearAndM
 
     try {
         // Acquire a connection from the pool
-        const connection = await pool.getConnection();
+        const connection = await dbConnectionPool.getConnection();
 
         // Validate manager exists
         const validateManagerQuery = 'SELECT * FROM empdata WHERE BINARY employee_id = ?';

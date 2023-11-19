@@ -10,12 +10,21 @@ var properties = PropertiesReader('config/app.properties');
 
 // Create a connection pool
 const dbConnectionPool = mysql.createPool({
+<<<<<<< HEAD
     user: properties.get("db.user"),
     host: properties.get("db.server"),
     database: properties.get("db.name"),
     password: properties.get("db.password"),
     port: properties.get("db.port"),
     connectionLimit: properties.get("db.connectionLimit"), // Adjust the connection limit as needed
+=======
+    user: 'root',
+    host: '127.0.0.1',
+    database: 'emptime',
+    password: 'password@123',
+    port: 3307,
+    connectionLimit: 10, // Adjust the connection limit as needed
+>>>>>>> b477726 (Cleaned up unwanted files (#8))
 });
 
 

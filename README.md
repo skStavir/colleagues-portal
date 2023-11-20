@@ -9,7 +9,7 @@ run `npm install`
 run `node app.js` to start the server
 
 
-## How to run the server in docker 
+## How to run the server in docker (optional)
 `docker build -t colleague-portal-1.4 .`
 `docker-componse up`
 ### To stop

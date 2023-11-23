@@ -3,8 +3,23 @@ const express = require('./parent.js');
 const dbConnectionPool = require('./db.js');
 const loginAPIs = express.Router();
 
-// Login API endpoint
+
 loginAPIs.post('/', async (req, res) => {
+  //1. get user password (refer get employee API)
+  //1.1 create connection
+  //1.2 query db using connection
+  //1.3 get data
+  //2. validate if the password is correct (refer exisitng code)
+  //3. if invalid password throw error(refer exisitng code)
+  //4. create token (refer exisitng code)
+  //5. save token to db (reder post employee API)
+  //5.1 create connection
+  //5.2 execute query
+  //end
+
+});
+// Login API endpoint - old code for reference, delete once the new code is working.
+loginAPIs.post('/oldcodeforrefernce', async (req, res) => {
   console.log("loginAPI");
   const { username, password } = req.body;
   console.log("req body");

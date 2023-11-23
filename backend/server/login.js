@@ -10,6 +10,12 @@ loginAPIs.post('/', (req, res) => {
   console.log("req body");
   const connection =  dbConnectionPool.getConnection();
   console.log("connection" + connection);
+  const query = {
+    text: 'SELECT * FROM empcred WHERE username = ?',
+    values: [
+      username
+    ],
+};
   const results = connection.query('SELECT * FROM empcred WHERE username = ?', [username]);
   console.log("results" + results);
   if (err) {

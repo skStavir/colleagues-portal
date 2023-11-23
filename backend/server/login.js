@@ -7,7 +7,9 @@ const loginAPIs = express.Router();
 loginAPIs.post('/', (req, res) => {
   console.log("loginAPI");
   const { username, password } = req.body;
+  console.log("req body");
   const connection =  dbConnectionPool.getConnection();
+  console.log("connection" + connection);
   const results = connection.query('SELECT * FROM empcred WHERE username = ?', [username]);
   console.log("results" + results);
   if (err) {

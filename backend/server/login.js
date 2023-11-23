@@ -4,7 +4,7 @@ const dbConnectionPool = require('./db.js');
 const loginAPIs = express.Router();
 
 // Login API endpoint
-loginAPIs.post('/', (req, res) => {
+loginAPIs.post('/', async (req, res) => {
   console.log("loginAPI");
   const { username, password } = req.body;
   console.log("req body");
@@ -16,7 +16,7 @@ loginAPIs.post('/', (req, res) => {
       username
     ],
 };
-  const results = connection.query('SELECT * FROM empcred WHERE username = ?', [username]);
+  const results = await connection.query('SELECT * FROM empcred WHERE username = ?', [username]);
   console.log("results" + results);
   if (err) {
     console.error('Error during login:', err);

@@ -3,6 +3,45 @@ var dbConnectionPool = require('./db.js');
 const express = require('./parent.js')
 var employeeAPIs = express.Router();
 
+// Middleware to check and validate the token
+const authenticateToken = async (req, res, next) => {
+    const token = req.header('Authorization');
+
+    if (!token) {
+        return res.status(401).send('Unauthorized - Token missing');
+    }
+
+    try {
+        // Fetch token and expiry time from empcred table
+        const connection = await dbConnectionPool.getConnection();
+        const query = 'SELECT token, expiryTime FROM empcred WHERE token = ?';
+        const [results] = await connection.execute(query, [token]);
+        connection.release();
+
+        if (results.length === 0) {
+            return res.status(401).send('Unauthorized - Token not found');
+        }
+
+        const { expiryTime  } = results[0];
+
+        // Check if the token is still active
+        if (new Date(expiryTime) < new Date()) {
+            return res.status(401).send('Unauthorized - Token expired');
+        }
+
+        // Token is valid, continue with the API operation
+        next();
+    } catch (error) {
+        console.error('Error authenticating token:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+};
+
+// Apply token authentication middleware to all employee APIs
+employeeAPIs.use(authenticateToken);
+
+
+
 // Insert data into the "empdata" table
 employeeAPIs.post("/", async (req, res) => {
     const empData = req.body;

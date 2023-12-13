@@ -1,8 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
 var dbConnectionPool = require('./db.js');
 const express = require('./parent.js')
+const { authenticateToken } = require('./tokenValidation'); 
 var timesheetAPIs = express.Router();
 
+
+// Apply the authentication middleware to all API routes
+timesheetAPIs.use(authenticateToken);
 //Timesheet APIS
 // Create a POST route for adding timesheet data
 timesheetAPIs.post('/', async (req, res) => {
@@ -42,6 +46,8 @@ timesheetAPIs.post('/', async (req, res) => {
 });
 
 //FETCH TIMESHEET BASED ON EMPLOYEE ID
+
+//FETCH TIMESHEET BASED ON EMPLOYEE ID
 // Function to validate the yearAndMonth parameter
 function isValidYearAndMonth(yearAndMonth) {
     const regex = /^\d{4}-\d{2}$/;
@@ -54,7 +60,7 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
 
     // Check for an invalid month in the request parameters
     if (!isValidYearAndMonth(yearAndMonth)) {
-        res.status(400).json({ error: 'Invalid month' });
+        res.status(400).json({ error: 'Invalid month ' });
         return;
     }
 
@@ -73,13 +79,7 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
         const [results] = await connection.execute(query, [employeeId, year, month]);
 
         if (results.length === 0) {
-            // Check if the month is valid but not present in the database
-            const isValidMonth = isValidYearAndMonth(yearAndMonth);
-            if (isValidMonth) {
-                res.status(404).json({ error: 'No timesheet entries for the specified month' });
-            } else {
-                res.status(400).json({ error: 'Invalid month' });
-            }
+            res.status(404).json({ error: 'No timesheet entries for the specified month' });
         } else {
             res.json(results);
         }
@@ -92,82 +92,54 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
 });
 
 
-
 //FETCH TIMESHEET BASED ON REPORTING MANAGER ID
+
 timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndMonth', async (req, res) => {
     const { reporting_manager_id, yearAndMonth } = req.params;
+    let connection;
 
     try {
-        // Acquire a connection from the pool
-        const connection = await dbConnectionPool.getConnection();
+        connection = await dbConnectionPool.getConnection();
 
-        // Validate manager exists
-        const validateManagerQuery = 'SELECT * FROM empdata WHERE BINARY employee_id = ?';
-        connection.query(validateManagerQuery, [reporting_manager_id], (err, managerResult) => {
-            if (err) {
-                console.error('Error validating manager:', err);
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
-            }
+        const managerResult = await connection.execute('SELECT * FROM empdata WHERE BINARY employee_id = ?', [reporting_manager_id]);
 
-            if (managerResult.length === 0) {
-                // Manager does not exist
-                res.status(404).json({ error: 'Employee does not exist' });
-                return;
-            }
+        if (managerResult.length === 0) {
+            res.status(404).json({ error: 'Employee does not exist' });
+            return;
+        }
 
-            // Validate month format
-            function isValidYearAndMonth(yearAndMonth) {
-                const regex = /^\d{4}-\d{2}$/;
-                return regex.test(yearAndMonth);
-            }
+        if (!isValidYearAndMonth(yearAndMonth)) {
+            res.status(400).json({ error: 'Invalid year and month format' });
+            return;
+        }
 
-            if (!isValidYearAndMonth(yearAndMonth)) {
-                res.status(400).json({ error: 'Invalid year and month format' });
-                return;
-            }
+        const [year, month] = yearAndMonth.split('-');
 
-            // Extract year and month from yearAndMonth parameter
-            const year = yearAndMonth.substring(0, 4);
-            const month = yearAndMonth.substring(5, 7);
+        const fetchTimesheetQuery = `
+            SELECT t.timesheet_id, t.date, t.working_hours, t.leaves, t.holiday, t.employee_id
+            FROM emptimesheet t
+            JOIN empdata e ON t.employee_id = e.employee_id
+            WHERE YEAR(t.date) = ? AND MONTH(t.date) = ?
+            AND e.reporting_manager_id = ?
+            ORDER BY t.employee_id, t.date;
+        `;
 
-            // Fetch timesheet entries using JOIN query
-            const fetchTimesheetQuery = `
-                SELECT t.timesheet_id, t.date, t.working_hours, t.leaves, t.holiday, t.employee_id
-                FROM emptimesheet t
-                JOIN empdata e ON t.employee_id = e.employee_id
-                WHERE YEAR(t.date) = ? AND MONTH(t.date) = ?
-                AND e.reporting_manager_id = ?
-                ORDER BY t.employee_id, t.date;
-            `;
+        const [timesheetResult] = await connection.execute(fetchTimesheetQuery, [year, month, reporting_manager_id]);
 
-            connection.query(fetchTimesheetQuery, [year, month, reporting_manager_id], (err, timesheetResult) => {
-                if (err) {
-                    console.error('Error fetching timesheet:', err);
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    return;
-                }
-
-                // Check if there are entries for the specified month
-                if (timesheetResult.length === 0) {
-                    res.status(404).json({ error: 'No timesheet entries found for the specified month' });
-                    return;
-                }
-
-                // Return timesheet details
-                res.json(timesheetResult);
-            });
-
-            // Release the connection back to the pool
-            connection.release();
-        });
+        if (timesheetResult.length === 0) {
+            res.status(404).json({ error: 'No timesheet entries found for the specified month' });
+        } else {
+            res.json(timesheetResult);
+        }
     } catch (error) {
-        console.error('Error acquiring database connection:', error);
+        console.error('Error in timesheet API:', error);
         res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (connection) {
+            connection.release();
+        }
     }
 });
-
-
 
 module.exports=timesheetAPIs;
 

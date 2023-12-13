@@ -1,7 +1,15 @@
 const { v4: uuidv4 } = require('uuid');
 var dbConnectionPool = require('./db.js');
-const express = require('./parent.js')
+const express = require('./parent.js');
+const { authenticateToken } = require('./tokenValidation'); 
 var employeeAPIs = express.Router();
+
+
+
+// Apply token authentication middleware to all employee APIs
+employeeAPIs.use(authenticateToken);
+
+
 
 // Insert data into the "empdata" table
 employeeAPIs.post("/", async (req, res) => {

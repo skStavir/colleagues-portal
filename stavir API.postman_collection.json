@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "bd53eec7-a361-43ea-b1d8-a4cb95640142",
+		"name": "stavir API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28847922"
+	},
+	"item": [
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"employee_name\": \"Devi.palliyil\",\r\n        \"designation\": \"Azure Engineer\",\r\n        \"phone_number\": \"9496348256\",\r\n        \"email\": \"devi@stavir.com\",\r\n        \"joining_date\": \"2023-07-11T00:00:00.000Z\",\r\n        \"leaving_date\": \"2024-07-25T00:00:00.000Z\",\r\n        \"reporting_manager_id\": \"b47d663d-f4ab-491c-a5cf-eda28e4ccbb8\",\r\n        \"address\": \"Guruvayur\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/employees",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"employee_name\": \"GOPIKA\",\r\n        \"designation\": \"Azure Engineer\",\r\n        \"phone_number\": \"9496348256\",\r\n        \"email\": \"devi@stavir.com\",\r\n        \"joining_date\": \"2023-07-11T00:00:00.000Z\",\r\n        \"leaving_date\": \"2024-07-25T00:00:00.000Z\",\r\n        \"reporting_manager_id\": \"b47d663d-f4ab-491c-a5cf-eda28e4ccbb8\",\r\n        \"address\": \"Guruvayur\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/employees",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"employees"
+					]
+				},
+				"description": "POST"
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"username\": \"Ajesh ajayan\",\r\n        \"password\": \"Ajajayan345\"\r\n       \r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				},
+				"description": "logn"
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"timesheet_id\": \"stam01122023\",\r\n        \"date\": \"2025-12-01\",\r\n        \"working_hours\": \"12h\",\r\n        \"leaves\": \"2025-12-02\",\r\n        \"holiday\": \"2025-12-25\",\r\n        \"employee_id\": \"94efb9b2-bf62-46ce-a1f6-12a554d7854c\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/timesheet",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"timesheet"
+					]
+				},
+				"description": "post timesheet"
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"timesheet_id\": \"stam01122023\",\r\n        \"date\": \"2025-12-01\",\r\n        \"working_hours\": \"12h\",\r\n        \"leaves\": \"2025-12-02\",\r\n        \"holiday\": \"2025-12-25\",\r\n        \"employee_id\": \"94efb9b2-bf62-46ce-a1f6-12a554d7854c\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/timesheet/employees/94efb9b2-bf62-46ce-a1f6-12a554d7854c/month/2025-12",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"timesheet",
+						"employees",
+						"94efb9b2-bf62-46ce-a1f6-12a554d7854c",
+						"month",
+						"2025-12"
+					]
+				},
+				"description": "timesheet by id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \"timesheet_id\": \"stam01122023\",\r\n        \"date\": \"2025-12-01\",\r\n        \"working_hours\": \"12h\",\r\n        \"leaves\": \"2025-12-02\",\r\n        \"holiday\": \"2025-12-25\",\r\n        \"employee_id\": \"94efb9b2-bf62-46ce-a1f6-12a554d7854c\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/timesheet/employees/:049a20ef-fb33-484e-8d0b-17ff76b9b47e/subordinates/month/:2025-08",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"timesheet",
+						"employees",
+						":049a20ef-fb33-484e-8d0b-17ff76b9b47e",
+						"subordinates",
+						"month",
+						":2025-08"
+					],
+					"variable": [
+						{
+							"key": "049a20ef-fb33-484e-8d0b-17ff76b9b47e",
+							"value": ""
+						},
+						{
+							"key": "2025-08",
+							"value": ""
+						}
+					]
+				},
+				"description": "get usng rprtng mngr"
+			},
+			"response": []
+		},
+		{
+			"name": "http://50.16.114.5:3000/api/v1/employees",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n        \r\n        \r\n        \"employee_name\": \"gopika.varma\",\r\n        \"designation\": \"testng\",\r\n        \"phone_number\": \"20251202\",\r\n        \"email\": \"abc@stavr.com\",\r\n        \"joining_date\": \"2025-12-02\",\r\n        \"leaving_date\": \"2025-12-03\",\r\n        \"reporting_manager_id\":\"b47d663d-f4ab-491c-a5cf-eda28e4ccbb8\",\r\n        \"address\":\"trivandrum\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://50.16.114.5:3000/api/v1/employees/165f0a82-bdac-4b74-8083-0c5ae9ce2e8e",
+					"protocol": "http",
+					"host": [
+						"50",
+						"16",
+						"114",
+						"5"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"employees",
+						"165f0a82-bdac-4b74-8083-0c5ae9ce2e8e"
+					]
+				},
+				"description": "put emp"
+			},
+			"response": []
+		}
+	]
+}

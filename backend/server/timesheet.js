@@ -4,18 +4,21 @@ const express = require('./parent.js')
 const { authenticateToken } = require('./tokenValidation'); 
 var timesheetAPIs = express.Router();
 
-
 // Apply the authentication middleware to all API routes
 timesheetAPIs.use(authenticateToken);
-//Timesheet APIS
+
+// Timesheet APIS
 // Create a POST route for adding timesheet data
 timesheetAPIs.post('/', async (req, res) => {
-    const { timesheet_id, employee_id, date, working_hours, leaves, holiday } = req.body;
+    const { employee_id, date, working_hours, leaves, holiday } = req.body;
 
-    if (!timesheet_id || !employee_id || !date || working_hours === undefined || leaves === undefined || holiday === undefined) {
+    if (!employee_id || !date || working_hours === undefined || leaves === undefined || holiday === undefined) {
         res.status(400).json({ error: "Invalid request payload" });
         return;
     }
+
+    // Generate UUID and convert to string
+    const timesheet_id = uuidv4();
 
     const insertOrUpdateQuery = `
         INSERT INTO emptimesheet (timesheet_id, employee_id, date, working_hours, leaves, holiday)
@@ -44,6 +47,7 @@ timesheetAPIs.post('/', async (req, res) => {
         res.status(500).json({ error: "Database error: " + err.message });
     }
 });
+
 
 //FETCH TIMESHEET BASED ON EMPLOYEE ID
 

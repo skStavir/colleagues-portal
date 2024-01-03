@@ -5,6 +5,8 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useState(null);
+  const [name, setName] = useState(null);
+  const [hasReportees, setHasReportees] = useState(null);
   const [error, setError] = useState(null);
 
   const handleLogin = async () => {
@@ -20,7 +22,8 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         setToken(data.token);
-        console.log('Login successful. Token:', data.token);
+        setName(data.employee_name); // Assuming the key is 'employee_name'
+        setHasReportees(data.hasReportees);
         setError(null); // Clear any previous errors
       } else {
         const errorData = await response.json(); // Assuming the error response is JSON
@@ -53,6 +56,10 @@ const Login = () => {
       </form>
       {error && <p className="error-message">{error}</p>}
       {token && <p className="token-message">Token: {token}</p>}
+      {name && <p className="name-message">Name: {name}</p>}
+      {hasReportees !== null && (
+        <p className="has-reportees-message">Has Reportees: {hasReportees.toString()}</p>
+      )}
     </div>
   );
 };

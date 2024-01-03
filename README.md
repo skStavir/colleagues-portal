@@ -37,3 +37,6 @@ git add . or git add filename
 git commit -m "Your commit message here"
 ###9 Use the git push command to push your code to GitHub. You'll need to specify the remote name (usually "origin") and the branch name (usually "main" or "master"). Replace these as needed.
 git push origin main
+
+![image](https://github.com/skStavir/colleagues-portal/assets/146941497/0f168735-4d57-4cd0-9647-c216599f5d2f)
+

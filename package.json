@@ -1,0 +1,20 @@
+{
+  "name": "colleagues-portal",
+  "version": "1.0.0",
+  "description": "This repo contains both the backend and front ent code of the colleague portal\r ## How to run the server\r the server code is in the directory backend/server\r configure the database details in the fole config/app.properties",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skStavir/colleagues-portal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skStavir/colleagues-portal/issues"
+  },
+  "homepage": "https://github.com/skStavir/colleagues-portal#readme"
+}

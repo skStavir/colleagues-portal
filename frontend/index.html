@@ -1,206 +1,43 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Company Calendar</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-        h1 {
-            text-align: center;
-            padding: 20px;
-            color: #333;
-        }
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-        div {
-            text-align: center;
-            margin: 20px auto;
-            max-width: 400px;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-        label, select, input {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            margin: 0 auto;
-            background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-
-        th {
-            background-color: #f1f1f1;
-            color: #333;
-            font-weight: bold;
-        }
-
-        button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to Humaneo</h1>
-    
-    <!-- Employee Information Section -->
-    <div>
-        <label for="employeeName">Employee Name:</label>
-        <input type="text" id="employeeName" name="employeeName"><br><br>
-        
-        <label for="Month">Month:</label>
-        <select id="currentMonth" name="currentMonth">
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
-        
-        <label for="Year">Year:</label>
-        <select id="currentYear" name="currentYear">
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-        </select>
-    </div>
-    
-    <!-- Calendar Table Section -->
-    <h2>Calendar Entries</h2>
-    <table border="1" id="calendarTable">
-        <tr>
-            <th>Date</th>
-            <th>Working Hours</th>
-            <th>Leave Hours</th>
-            <th>Holiday Hours</th>
-        </tr>
-        
-        <!-- Calendar rows will be added here -->
-    </table>
-    
-    <!-- Edit Button -->
-    <button id="editButton">Edit</button>
-    
-    <script>
-        var editMode = false;
-        var editButton = document.getElementById("editButton");
-        
-        editButton.addEventListener("click", toggleEditMode);
-        
-        function toggleEditMode() {
-            editMode = !editMode;
-            editButton.textContent = editMode ? "Save" : "Edit";
-            
-            var inputFields = document.querySelectorAll("#calendarTable input");
-            inputFields.forEach(function(input) {
-                input.disabled = !editMode;
-            });
-        }
-        
-        function formatDayMonthYear(date) {
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            return day + "-" + month + "-" + year;
-        }
-        
-        function displayCalendar() {
-            var selectedMonth = parseInt(document.getElementById("currentMonth").value, 10);
-            var selectedYear = parseInt(document.getElementById("currentYear").value, 10);
-            var calendarTable = document.getElementById("calendarTable");
-            
-            // Clear previous rows from the table
-            while (calendarTable.rows.length > 1) {
-                calendarTable.deleteRow(1);
-            }
-            
-            // Calculate the number of days in the selected month
-            var daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-            
-            // Generate rows for each day in the month
-            for (var day = 1; day <= daysInMonth; day++) {
-                var newRow = calendarTable.insertRow(-1);
-                var cellDate = newRow.insertCell(0);
-                var cellWorkingHours = newRow.insertCell(1);
-                var cellLeaveHours = newRow.insertCell(2);
-                var cellHolidayHours = newRow.insertCell(3);
-                
-                // Format the day with leading zero if needed
-                var formattedDay = day < 10 ? "0" + day : day;
-                
-                var date = new Date(selectedYear, selectedMonth - 1, day);
-                var formattedDate = formatDayMonthYear(date);
-                
-                cellDate.textContent = formattedDate;
-                cellWorkingHours.innerHTML = '<input type="number" name="workingHours" step="0.5" Max="8" disabled>';
-                cellLeaveHours.innerHTML = '<input type="number" name="leaveHours" step="0.5" Max="8" disabled>';
-                cellHolidayHours.innerHTML = '<input type="number" name="holidayHours" step="0.5" Max="8" disabled>';
-            }
-        }
-        
-        // Automatically display calendar on month or year change
-        document.getElementById("currentMonth").addEventListener("change", displayCalendar);
-        document.getElementById("currentYear").addEventListener("change", displayCalendar);
-        
-        // Initial display
-        displayCalendar();
-    </script>
-</body>
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>
-
-
